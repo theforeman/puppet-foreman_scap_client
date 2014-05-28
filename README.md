@@ -1,0 +1,1 @@
+#OpenSCAP Puppet Module
