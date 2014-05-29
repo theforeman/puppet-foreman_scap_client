@@ -20,7 +20,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
     Dir.mkdir('/tmp/xccdf_scan/')
     session = OpenSCAP::Xccdf::Session.new(resource[:xccdf_path])
     session.load
-    session.profile = "xccdf_org.ssgproject.content_profile_common"
+    session.profile = resource[:xccdf_profile]
     session.evaluate
     session.export_results(rds_file: _target_location_rds)
   end

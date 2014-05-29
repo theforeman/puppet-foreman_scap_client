@@ -31,4 +31,8 @@ Puppet::Type.newtype(:xccdf_scan) do
       end
     end
   end
+
+  newparam(:xccdf_profile) do
+    desc "ID of XCCDF Profile"
+  end
 end
