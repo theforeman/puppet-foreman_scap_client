@@ -17,7 +17,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
   end
 
   def create
-    Dir.mkdir _target_location_dir
+    FileUtils.mkdir_p _target_location_dir
     session = OpenSCAP::Xccdf::Session.new(resource[:xccdf_path])
     session.load
     session.profile = resource[:xccdf_profile]
@@ -29,7 +29,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
   private
 
   def _target_location_dir
-    return '/var/lib/openscap/'
+    return '/var/lib/openscap/xccdf_scan/' + resource[:name] + '/'
   end
 
   def _target_location_rds
