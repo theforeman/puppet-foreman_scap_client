@@ -18,7 +18,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
 
   def create
     Dir.mkdir('/tmp/xccdf_scan/')
-    session = OpenSCAP::Xccdf::Session.new("/usr/share/xml/scap/ssg/fedora/ssg-fedora-ds.xml")
+    session = OpenSCAP::Xccdf::Session.new(resource[:xccdf_path])
     session.load
     session.profile = "xccdf_org.ssgproject.content_profile_common"
     session.evaluate

@@ -22,4 +22,13 @@ Puppet::Type.newtype(:xccdf_scan) do
       is.downcase == should.downcase
     end
   end
+
+  newparam(:xccdf_path) do
+    desc "Path to XCCDF or DataStream file."
+    validate do |value|
+      unless File::exists? value
+        raise ArgumentError, "%s is not valid file path" % value
+      end
+    end
+  end
 end
