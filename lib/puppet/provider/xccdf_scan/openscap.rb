@@ -33,6 +33,10 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
   end
 
   def _target_location_rds
-    return _target_location_dir + "results.rds.xml"
+    return _target_location_dir + _rds_filename
+  end
+
+  def _rds_filename
+    return "results.rds.xml"
   end
 end
