@@ -29,7 +29,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
   private
 
   def _target_location_dir
-    return '/tmp/xccdf_scan/'
+    return '/var/lib/openscap/'
   end
 
   def _target_location_rds
