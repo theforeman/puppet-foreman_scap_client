@@ -37,6 +37,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
   end
 
   def _rds_filename
-    return "results.rds.xml"
+    schedule = resource[:scap_schedule] ? @resource.catalog.resource(:scap_schedule, resource[:scap_schedule]) : nil
+    schedule ? schedule.get_filename : "results.rds.xml"
   end
 end

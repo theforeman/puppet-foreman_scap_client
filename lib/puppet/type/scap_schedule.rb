@@ -9,12 +9,11 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-Puppet::Type.newtype(:xccdf_scan) do
-  @doc = "Creates an SCAP report directory with SCAP result files"
-  ensurable
+Puppet::Type.newtype(:scap_schedule) do
+  @doc = "Defines date and time when the SCAP audit shall happen"
 
   newparam(:name, :namevar => true) do
-    desc "Name of the SCAP report"
+    desc "Name of schedule definition"
     munge do |value|
       value.downcase
     end
@@ -23,22 +22,12 @@ Puppet::Type.newtype(:xccdf_scan) do
     end
   end
 
-  newparam(:xccdf_path) do
-    desc "Path to XCCDF or DataStream file."
-    validate do |value|
-      unless File::exists? value
-        raise ArgumentError, "%s is not valid file path" % value
-      end
-    end
+  newparam(:period) do
+    desc "The period of repetition for SCAP audits on this schedule."
+    newvalues(:daily, :weekly, :monthly)
   end
 
-  newparam(:xccdf_profile) do
-    desc "ID of XCCDF Profile"
-  end
-
-  newparam(:scap_schedule) do
-    desc "A schedule which defines when the xccdf_scan shall be repeated."
-    validate do |value|
-    end
+  def get_filename
+    return self[:period].to_s + '.rds.xml'
   end
 end
