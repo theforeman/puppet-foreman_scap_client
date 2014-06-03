@@ -35,6 +35,13 @@ Puppet::Type.newtype(:scap_schedule) do
 
   private
   def _last_matching_day
-    Date.today
+    Date.today.downto(Date.today << 1) do |d|
+      return d if case self[:period]
+        when :daily then true
+        when :weekly then d.monday?
+        when :monthly then d.mday == 1
+      end
+    end
+    raise 'No candidate scan day found.'
   end
 end
