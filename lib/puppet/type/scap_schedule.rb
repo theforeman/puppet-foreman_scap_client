@@ -9,6 +9,8 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
+require 'date'
+
 Puppet::Type.newtype(:scap_schedule) do
   @doc = "Defines date and time when the SCAP audit shall happen"
 
@@ -28,6 +30,11 @@ Puppet::Type.newtype(:scap_schedule) do
   end
 
   def get_filename
-    return self[:period].to_s + '.rds.xml'
+    _last_matching_day.strftime('%Y-%m-%d') + '.rds.xml'
+  end
+
+  private
+  def _last_matching_day
+    Date.today
   end
 end
