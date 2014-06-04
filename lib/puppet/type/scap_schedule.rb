@@ -29,19 +29,55 @@ Puppet::Type.newtype(:scap_schedule) do
     newvalues(:daily, :weekly, :monthly)
   end
 
+  newparam(:weekday) do
+    desc "The days of the week in which the schedule should be valid.
+          You may specify the full day name (Tuesday), the three character
+          abbreviation (Tue)"
+    validate do |values|
+      values = [values] unless values.is_a?(Array)
+      values.each { |value|
+        raise ArgumentError, "%s is not a valid day of the week" % value unless value.is_a?(String) and
+            (value =~ /^[0-6]$/ or value =~ /^(Mon|Tues?|Wed(?:nes)?|Thu(?:rs)?|Fri|Sat(?:ur)?|Sun)(day)?$/i)
+      }
+    end
+
+    weekdays = {'sun' => 0, 'mon' => 1, 'tue' => 2, 'wed' => 3, 'thu' => 4, 'fri' => 5, 'sat' => 6}
+
+    munge do |values|
+      values = [values] unless values.is_a?(Array)
+      ret = {}
+
+      values.each { |value|
+        if value =~ /^[0-6]$/
+          index = value.to_i
+        else
+          index = weekdays[value[0,3].downcase]
+        end
+        ret[index] = true
+      }
+      ret
+    end
+  end
+
   def get_filename
     _last_matching_day.strftime('%Y-%m-%d') + '.rds.xml'
   end
 
   private
   def _last_matching_day
-    Date.today.downto(Date.today << 1) do |d|
+    Date.today.downto(Date.today << 2) do |d|
       return d if case self[:period]
         when :daily then true
-        when :weekly then d.monday?
-        when :monthly then d.mday == 1
+        when :weekly then
+          self[:weekday] ? _matches_wday(d) : d.monday?
+        when :monthly then
+          self[:weekday] ? (d.mday <= 7 and _matches_wday(d)) : d.mday == 1
       end
     end
     raise 'No candidate scan day found.'
+  end
+
+  def _matches_wday(day)
+    self[:weekday] ? self[:weekday][day.wday] : true
   end
 end
