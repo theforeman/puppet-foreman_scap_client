@@ -59,12 +59,7 @@ Puppet::Type.newtype(:scap_schedule) do
     end
   end
 
-  def get_filename
-    _last_matching_day.strftime('%Y-%m-%d') + '.rds.xml'
-  end
-
-  private
-  def _last_matching_day
+  def last_matching_day
     Date.today.downto(Date.today << 2) do |d|
       return d if case self[:period]
         when :daily then true
@@ -77,6 +72,7 @@ Puppet::Type.newtype(:scap_schedule) do
     raise 'No candidate scan day found.'
   end
 
+  private
   def _matches_wday(day)
     self[:weekday] ? self[:weekday][day.wday] : true
   end
