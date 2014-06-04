@@ -32,6 +32,10 @@ Puppet::Type.newtype(:xccdf_scan) do
     end
   end
 
+  validate do
+    raise ArgumentError, "xccdf_path is missing" unless self[:xccdf_path]
+  end
+
   newparam(:xccdf_profile) do
     desc "ID of XCCDF Profile"
   end
