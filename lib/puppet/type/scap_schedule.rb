@@ -26,7 +26,7 @@ Puppet::Type.newtype(:scap_schedule) do
 
   newparam(:period) do
     desc "The period of repetition for SCAP audits on this schedule."
-    newvalues(:daily, :weekly, :monthly)
+    newvalues(:weekly, :monthly)
   end
 
   newparam(:weekday) do
@@ -62,7 +62,6 @@ Puppet::Type.newtype(:scap_schedule) do
   def last_matching_day
     Date.today.downto(Date.today << 2) do |d|
       return d if case self[:period]
-        when :daily then true
         when :weekly then
           self[:weekday] ? _matches_wday(d) : d.monday?
         when :monthly then
