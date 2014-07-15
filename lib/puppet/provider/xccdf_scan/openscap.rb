@@ -9,13 +9,12 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-begin
-  require 'openscap'
-rescue LoadError
-  Puppet.warning "Ruby bindings for OpenSCAP could not be loaded."
-end
+require 'openscap' if Puppet.features.openscap?
 
 Puppet::Type.type(:xccdf_scan).provide :openscap do
+
+  confine :feature => :openscap
+
   def exists?
     return File::exist? _target_location_rds
   end
