@@ -13,11 +13,13 @@ class openscap::xccdf::eval (
 
 )
 {
+  include 'openscap::package'
+
+  Class['openscap::package'] ->
   scap_schedule {'saturdays':
     period => weekly,
     weekday => 'Sat',
-  }
-
+  } ->
   xccdf_scan {'weekly-ssg-audit':
     ensure => 'present',
     xccdf_path => '/usr/share/xml/scap/ssg/fedora/ssg-fedora-ds.xml',
