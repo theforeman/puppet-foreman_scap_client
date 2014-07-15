@@ -9,12 +9,17 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-class openscap::package (
-)
-{
-  include 'openscap::params'
+class openscap::params {
+  case $::osfamily {
+    'redhat' : {
+      $packages = ['rubygem-openscap']
+    }
 
-  package {$openscap::params::packages:
-    ensure => present,
+    default : {
+      #
+      # TODO add other OS families
+      #
+      fail("The ${module_name} module is not supported on an ${::osfamily} based system.")
+    }
   }
 }
