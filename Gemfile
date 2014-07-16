@@ -7,5 +7,5 @@ else
 end
 
 gem 'puppet', puppetversion
-gem 'openscap', '>= 0.1.0'
+gem 'openscap', '>= 0.1.1'
 
