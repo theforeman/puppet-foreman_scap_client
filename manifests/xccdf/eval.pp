@@ -21,7 +21,7 @@
 # $xccdf_path:: Path to XCCDF or DataStream file
 # $xccdf_profile:: XCCDF Profile to evaluate
 # $period:: How often the evaluation shall happen
-# $period:: Preferable weekday for evaluation to happen
+# $weekday:: Preferable weekday for evaluation to happen
 # $content_package:: Package which includes $xccdf_path
 # $scan_name:: The identifier of the reoccuring scan on the disk
 #
@@ -30,7 +30,8 @@
 #
 # == Sample Usage:
 #
-#   class {'my-weekly-audit':
+#   class {openscap::xccdf::eval:
+#     name => 'my-weekly-audit',
 #     period => 'weekly',
 #     weekday => 'Fri',
 #   }
