@@ -23,6 +23,7 @@
 # $period:: How often the evaluation shall happen
 # $period:: Preferable weekday for evaluation to happen
 # $content_package:: Package which includes $xccdf_path
+# $scan_name:: The identifier of the reoccuring scan on the disk
 #
 # Default arguments will evaluate SCAP-Security-Guide policy in
 # a weekly manner.
@@ -41,6 +42,7 @@ class openscap::xccdf::eval (
   $content_package = $openscap::params::content_package,
   $period = $openscap::params::period,
   $weekday = $openscap::params::weekday,
+  $scan_name = 'untitled',
 ) inherits openscap::params
 {
   validate_string($xccdf_path)
@@ -52,7 +54,7 @@ class openscap::xccdf::eval (
     period => $period,
     weekday => $weekday,
   } ->
-  xccdf_scan {'weekly-ssg-audit':
+  xccdf_scan {$scan_name:
     ensure => 'present',
     xccdf_path => $xccdf_path,
     xccdf_profile => $xccdf_profile,
