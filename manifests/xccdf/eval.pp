@@ -10,9 +10,12 @@
 #
 
 class openscap::xccdf::eval (
-
-)
+  $xccdf_path = $openscap::params::xccdf_path,
+  $xccdf_profile = $openscap::params::xccdf_profile,
+) inherits openscap::params
 {
+  validate_string($xccdf_path)
+
   include 'openscap::package'
 
   Class['openscap::package'] ->
@@ -22,8 +25,8 @@ class openscap::xccdf::eval (
   } ->
   xccdf_scan {'weekly-ssg-audit':
     ensure => 'present',
-    xccdf_path => '/usr/share/xml/scap/ssg/fedora/ssg-fedora-ds.xml',
-    xccdf_profile => 'xccdf_org.ssgproject.content_profile_common',
+    xccdf_path => $xccdf_path,
+    xccdf_profile => $xccdf_profile,
     scap_schedule => 'saturdays',
   }
 }
