@@ -1,6 +1,6 @@
 {
   "name": "isimluk-openscap",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "isimluk",
   "summary": "This puppet module exposes OpenSCAP primitives to puppet DSL.",
   "license": "GNU General Public License, version 2 (GPLv2)",
