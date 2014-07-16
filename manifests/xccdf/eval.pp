@@ -22,6 +22,10 @@
 # $xccdf_profile:: XCCDF Profile to evaluate
 # $period:: How often the evaluation shall happen
 # $period:: Preferable weekday for evaluation to happen
+# $content_package:: Package which includes $xccdf_path
+#
+# Default arguments will evaluate SCAP-Security-Guide policy in
+# a weekly manner.
 #
 # == Sample Usage:
 #
@@ -34,6 +38,7 @@
 class openscap::xccdf::eval (
   $xccdf_path = $openscap::params::xccdf_path,
   $xccdf_profile = $openscap::params::xccdf_profile,
+  $content_package = $openscap::params::content_package,
   $period = $openscap::params::period,
   $weekday = $openscap::params::weekday,
 ) inherits openscap::params

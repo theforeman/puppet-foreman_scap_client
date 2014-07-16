@@ -17,4 +17,10 @@ class openscap::package (
   package {$openscap::params::packages:
     ensure => present,
   }
+
+  if $content_package {
+    package {$content_package:
+      ensure => present,
+    }
+  }
 }

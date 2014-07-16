@@ -13,6 +13,7 @@ class openscap::params {
   $period = 'weekly'
   $weekday = 'Sat'
 
+  $content_package = ['scap-security-guide']
   $xccdf_path = '/usr/share/xml/scap/ssg/fedora/ssg-fedora-ds.xml'
   $xccdf_profile = 'xccdf_org.ssgproject.content_profile_common'
 
