@@ -8,6 +8,22 @@
 # along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
+#
+# = Class: openscap::xccdf::eval
+#
+# This class evaluates XCCDF guidance and stores resutls at the client
+# machine.
+#
+# == Parameters:
+#
+# $xccdf_path:: Path to XCCDF or DataStream file
+# $xccdf_profile:: XCCDF Profile to evaluate
+#
+# == Sample Usage:
+#
+#   class {'my-weekly-audit':
+#   }
+#
 
 class openscap::xccdf::eval (
   $xccdf_path = $openscap::params::xccdf_path,
