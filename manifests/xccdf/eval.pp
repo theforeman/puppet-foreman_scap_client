@@ -11,23 +11,31 @@
 #
 # = Class: openscap::xccdf::eval
 #
-# This class evaluates XCCDF guidance and stores resutls at the client
-# machine.
+# This class ensures that client system is evaluated against given
+# XCCDF guidance. The class supports reoccuring scans. The results
+# are stored at the client system.
+#
 #
 # == Parameters:
 #
 # $xccdf_path:: Path to XCCDF or DataStream file
 # $xccdf_profile:: XCCDF Profile to evaluate
+# $period:: How often the evaluation shall happen
+# $period:: Preferable weekday for evaluation to happen
 #
 # == Sample Usage:
 #
 #   class {'my-weekly-audit':
+#     period => 'weekly',
+#     weekday => 'Fri',
 #   }
 #
 
 class openscap::xccdf::eval (
   $xccdf_path = $openscap::params::xccdf_path,
   $xccdf_profile = $openscap::params::xccdf_profile,
+  $period = $openscap::params::period,
+  $weekday = $openscap::params::weekday,
 ) inherits openscap::params
 {
   validate_string($xccdf_path)
@@ -35,14 +43,14 @@ class openscap::xccdf::eval (
   include 'openscap::package'
 
   Class['openscap::package'] ->
-  scap_schedule {'saturdays':
-    period => weekly,
-    weekday => 'Sat',
+  scap_schedule {'scap-schedule':
+    period => $period,
+    weekday => $weekday,
   } ->
   xccdf_scan {'weekly-ssg-audit':
     ensure => 'present',
     xccdf_path => $xccdf_path,
     xccdf_profile => $xccdf_profile,
-    scap_schedule => 'saturdays',
+    scap_schedule => 'scap-schedule',
   }
 }
