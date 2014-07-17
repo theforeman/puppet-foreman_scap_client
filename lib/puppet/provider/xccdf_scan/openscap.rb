@@ -15,8 +15,10 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
 
   confine :feature => :openscap
 
+  commands :bzip2 => "/usr/bin/bzip2"
+
   def exists?
-    return File::exist? _target_location_rds
+    return File::exist? _target_location_rds + ".bz2"
   end
 
   def create
@@ -30,6 +32,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
     ensure
       session.destroy
     end
+    bzip2 _target_location_rds
   end
 
 
