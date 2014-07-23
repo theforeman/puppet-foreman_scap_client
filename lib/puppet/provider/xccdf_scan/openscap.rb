@@ -46,8 +46,12 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
     return _target_location_dir + _rds_filename
   end
 
-  def _rds_filename
+  def _rds_date
     schedule = resource[:scap_schedule] ? @resource.catalog.resource(:scap_schedule, resource[:scap_schedule]) : nil
-    (schedule ? schedule.last_matching_day : Date.today).strftime('%Y-%m-%d') + '.rds.xml'
+    (schedule ? schedule.last_matching_day : Date.today).strftime('%Y-%m-%d')
+  end
+
+  def _rds_filename
+    _rds_date + '.rds.xml'
   end
 end
