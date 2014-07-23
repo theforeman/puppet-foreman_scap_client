@@ -9,6 +9,7 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
+require 'net/https'
 require 'openscap' if Puppet.features.openscap?
 
 Puppet::Type.type(:xccdf_scan).provide :openscap do
@@ -33,10 +34,39 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
       session.destroy
     end
     bzip2 _target_location_rds
+    _upload
   end
 
 
   private
+
+  def _upload
+    uri = URI.parse(_upload_uri)
+    self.info "Uploading results to #{uri}"
+    https = Net::HTTP.new(uri.host, uri.port)
+    https.use_ssl = true
+    https.verify_mode = OpenSSL::SSL::VERIFY_PEER
+    https.ca_file = Puppet[:localcacert]
+    https.cert = OpenSSL::X509::Certificate.new File.read Puppet[:hostcert]
+    https.key = OpenSSL::PKey::RSA.new File.read Puppet[:hostprivkey]
+
+    request = Net::HTTP::Put.new uri.path
+    request.body = File.read(_target_location_rds + ".bz2")
+    request['Content-Type'] = 'text/xml'
+    request['Content-Encoding'] = 'x-bzip2'
+    begin
+      res = https.request(request)
+      res.value
+    rescue StandardError => e
+      raise Puppet::Error, "Upload failed: #{e.message}"
+    end
+  end
+
+  def _upload_uri
+    foreman_proxy_fqdn = Puppet[:server]
+    foreman_proxy_port = 8443
+    "https://#{foreman_proxy_fqdn}:#{foreman_proxy_port}/openscap/arf/#{resource[:name]}/#{_rds_date}"
+  end
 
   def _target_location_dir
     return '/var/lib/openscap/xccdf_scan/' + resource[:name] + '/'
