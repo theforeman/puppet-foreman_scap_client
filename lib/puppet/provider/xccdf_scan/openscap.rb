@@ -23,18 +23,23 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
   end
 
   def create
-    FileUtils.mkdir_p _target_location_dir
     begin
-      session = OpenSCAP::Xccdf::Session.new(resource[:xccdf_path])
-      session.load
-      session.profile = resource[:xccdf_profile] unless resource[:xccdf_profile] == ''
-      session.evaluate
-      session.export_results(rds_file: _target_location_rds)
-    ensure
-      session.destroy
+      FileUtils.mkdir_p _target_location_dir
+      begin
+        session = OpenSCAP::Xccdf::Session.new(resource[:xccdf_path])
+        session.load
+        session.profile = resource[:xccdf_profile] unless resource[:xccdf_profile] == ''
+        session.evaluate
+        session.export_results(rds_file: _target_location_rds)
+      ensure
+        session.destroy
+      end
+      bzip2 _target_location_rds
+      scap_upload.provider.upload self if scap_upload
+    rescue Exception => e
+      File.unlink result_path
+      raise
     end
-    bzip2 _target_location_rds
-    scap_upload.provider.upload self if scap_upload
   end
 
   def scap_upload
