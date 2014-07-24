@@ -31,7 +31,7 @@ Puppet::Type.type(:scap_upload).provide :foreman_proxy do
       res = https.request(request)
       res.value
     rescue StandardError => e
-      self.info res.body
+      self.info res.body if res
       raise Puppet::Error, "Upload failed: #{e.message}"
     end
   end
