@@ -45,6 +45,11 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
     resource[:name]
   end
 
+  def date
+    schedule = resource[:scap_schedule] ? @resource.catalog.resource(:scap_schedule, resource[:scap_schedule]) : nil
+    (schedule ? schedule.last_matching_day : Date.today).strftime('%Y-%m-%d')
+  end
+
   private
 
   def _upload
@@ -73,7 +78,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
   def _upload_uri
     foreman_proxy_fqdn = Puppet[:server]
     foreman_proxy_port = 8443
-    "https://#{foreman_proxy_fqdn}:#{foreman_proxy_port}/openscap/arf/#{policy_name}/#{_rds_date}"
+    "https://#{foreman_proxy_fqdn}:#{foreman_proxy_port}/openscap/arf/#{policy_name}/#{date}"
   end
 
   def _target_location_dir
@@ -84,12 +89,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
     return _target_location_dir + _rds_filename
   end
 
-  def _rds_date
-    schedule = resource[:scap_schedule] ? @resource.catalog.resource(:scap_schedule, resource[:scap_schedule]) : nil
-    (schedule ? schedule.last_matching_day : Date.today).strftime('%Y-%m-%d')
-  end
-
   def _rds_filename
-    _rds_date + '.rds.xml'
+    date + '.rds.xml'
   end
 end
