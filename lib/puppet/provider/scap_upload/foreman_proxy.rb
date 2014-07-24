@@ -39,9 +39,13 @@ Puppet::Type.type(:scap_upload).provide :foreman_proxy do
   private
 
   def _upload_uri xccdf_eval
+    _foreman_proxy_uri + "/openscap/arf/#{xccdf_eval.policy_name}/#{xccdf_eval.date}"
+  end
+
+  def _foreman_proxy_uri
     foreman_proxy_fqdn = Puppet[:server]
     foreman_proxy_port = 8443
-    "https://#{foreman_proxy_fqdn}:#{foreman_proxy_port}/openscap/arf/#{xccdf_eval.policy_name}/#{xccdf_eval.date}"
+    "https://#{foreman_proxy_fqdn}:#{foreman_proxy_port}"
   end
 
 end
