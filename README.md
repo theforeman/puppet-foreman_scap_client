@@ -33,3 +33,18 @@ class { openscap::xccdf::eval:
   period => weekly,
 }
 ```
+
+## Class: openscap::xccdf::foreman_audit
+
+This class is very same as openscap::xccdf::eval. The only difference is that
+this one attempts to upload audit results to Foreman's smart-proxy.
+
+### Parameters:
+
+foreman_audit takes the same parameters as openscap::xccdf::eval, plus:
+
+ * foreman_proxy: The URI of Foremen's Smart Proxy to receive the audit result
+
+By default (without the foreman_proxy argument) foreman_audit assumes that proxy
+is hosted on the same system as the puppetmaster.
+
