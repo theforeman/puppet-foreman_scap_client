@@ -50,11 +50,12 @@ class openscap::xccdf::eval (
 
   include 'openscap::package'
 
-  Class['openscap::package'] ->
   scap_schedule {'scap-schedule':
     period => $period,
     weekday => $weekday,
-  } ->
+  }
+
+  Class['openscap::package'] ->
   xccdf_scan {$scan_name:
     ensure => 'present',
     xccdf_path => $xccdf_path,
