@@ -58,6 +58,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
       res = https.request(request)
       res.value
     rescue StandardError => e
+      self.info res.body
       raise Puppet::Error, "Upload failed: #{e.message}"
     end
   end
