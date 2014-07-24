@@ -40,4 +40,10 @@ Puppet::Type.newtype(:xccdf_scan) do
     validate do |value|
     end
   end
+
+  newparam(:scap_upload) do
+    desc "A scap_upload object that defines the target upload location of the scan."
+    validate do |value|
+    end
+  end
 end
