@@ -34,7 +34,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
       session.destroy
     end
     bzip2 _target_location_rds
-    _upload if scap_upload
+    scap_upload.provider.upload self if scap_upload
   end
 
   def scap_upload
@@ -55,35 +55,6 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
   end
 
   private
-
-  def _upload
-    uri = URI.parse(_upload_uri)
-    self.info "Uploading results to #{uri}"
-    https = Net::HTTP.new(uri.host, uri.port)
-    https.use_ssl = true
-    https.verify_mode = OpenSSL::SSL::VERIFY_PEER
-    https.ca_file = Puppet[:localcacert]
-    https.cert = OpenSSL::X509::Certificate.new File.read Puppet[:hostcert]
-    https.key = OpenSSL::PKey::RSA.new File.read Puppet[:hostprivkey]
-
-    request = Net::HTTP::Put.new uri.path
-    request.body = File.read(result_path)
-    request['Content-Type'] = 'text/xml'
-    request['Content-Encoding'] = 'x-bzip2'
-    begin
-      res = https.request(request)
-      res.value
-    rescue StandardError => e
-      self.info res.body
-      raise Puppet::Error, "Upload failed: #{e.message}"
-    end
-  end
-
-  def _upload_uri
-    foreman_proxy_fqdn = Puppet[:server]
-    foreman_proxy_port = 8443
-    "https://#{foreman_proxy_fqdn}:#{foreman_proxy_port}/openscap/arf/#{policy_name}/#{date}"
-  end
 
   def _target_location_dir
     return '/var/lib/openscap/xccdf_scan/' + policy_name + '/'
