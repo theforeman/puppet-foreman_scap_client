@@ -43,6 +43,7 @@ Puppet::Type.type(:scap_upload).provide :foreman_proxy do
   end
 
   def _foreman_proxy_uri
+    return resource[:foreman_proxy] if resource[:foreman_proxy]
     foreman_proxy_fqdn = Puppet[:server]
     foreman_proxy_port = 8443
     "https://#{foreman_proxy_fqdn}:#{foreman_proxy_port}"
