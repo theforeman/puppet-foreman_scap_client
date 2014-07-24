@@ -19,7 +19,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
   commands :bzip2 => "/usr/bin/bzip2"
 
   def exists?
-    return File::exist? _target_location_rds + ".bz2"
+    return File::exist? result_path
   end
 
   def create
@@ -50,6 +50,10 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
     (schedule ? schedule.last_matching_day : Date.today).strftime('%Y-%m-%d')
   end
 
+  def result_path
+    _target_location_rds + '.bz2'
+  end
+
   private
 
   def _upload
@@ -63,7 +67,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
     https.key = OpenSSL::PKey::RSA.new File.read Puppet[:hostprivkey]
 
     request = Net::HTTP::Put.new uri.path
-    request.body = File.read(_target_location_rds + ".bz2")
+    request.body = File.read(result_path)
     request['Content-Type'] = 'text/xml'
     request['Content-Encoding'] = 'x-bzip2'
     begin
