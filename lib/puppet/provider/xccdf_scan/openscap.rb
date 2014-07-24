@@ -41,6 +41,9 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
     resource[:scap_upload] ? @resource.catalog.resource(:scap_upload, resource[:scap_upload]) : nil
   end
 
+  def policy_name
+    resource[:name]
+  end
 
   private
 
@@ -70,11 +73,11 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
   def _upload_uri
     foreman_proxy_fqdn = Puppet[:server]
     foreman_proxy_port = 8443
-    "https://#{foreman_proxy_fqdn}:#{foreman_proxy_port}/openscap/arf/#{resource[:name]}/#{_rds_date}"
+    "https://#{foreman_proxy_fqdn}:#{foreman_proxy_port}/openscap/arf/#{policy_name}/#{_rds_date}"
   end
 
   def _target_location_dir
-    return '/var/lib/openscap/xccdf_scan/' + resource[:name] + '/'
+    return '/var/lib/openscap/xccdf_scan/' + policy_name + '/'
   end
 
   def _target_location_rds
