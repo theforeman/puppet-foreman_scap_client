@@ -34,7 +34,11 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
       session.destroy
     end
     bzip2 _target_location_rds
-    _upload
+    _upload if scap_upload
+  end
+
+  def scap_upload
+    resource[:scap_upload] ? @resource.catalog.resource(:scap_upload, resource[:scap_upload]) : nil
   end
 
 
