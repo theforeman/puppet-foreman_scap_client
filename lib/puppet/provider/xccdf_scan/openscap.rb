@@ -37,7 +37,7 @@ Puppet::Type.type(:xccdf_scan).provide :openscap do
       bzip2 _target_location_rds
       scap_upload.provider.upload self if scap_upload
     rescue Exception => e
-      File.unlink result_path
+      File.unlink result_path if exists?
       raise
     end
   end
