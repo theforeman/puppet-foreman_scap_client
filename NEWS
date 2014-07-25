@@ -1,0 +1,24 @@
+puppet-openscap-0.3.0			2014-06-25
+ - All stored results are bzip2ed (~90% reduction of disc space)
+ - Module can upload results to Foreman's Smart Proxy
+   (Assuming foreman-proxy_openscap plug-in installed).
+ - Support of Ruby 1.8 (previously 2.0+ was needed)
+ - Introduced resources:
+   - scap_upload
+ - Introduced classes:
+   - openscap::xccdf::foreman_audit
+ 
+puppet-openscap-0.2.0			2014-06-16
+ - the module attempts to install its dependencies
+ - introduced classes:
+   - openscap
+   - openscap::params
+   - openscap::package
+   - openscap::xccdf::eval
+
+puppet-openscap-0.1.0			2014-06-04
+ - project started
+ - introduced resources:
+   - scap_schedule
+   - xccdf_scan
+
