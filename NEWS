@@ -1,4 +1,4 @@
-puppet-openscap-0.3.0			2014-06-25
+puppet-openscap-0.3.0			2014-07-25
  - All stored results are bzip2ed (~90% reduction of disc space)
  - Module can upload results to Foreman's Smart Proxy
    (Assuming foreman-proxy_openscap plug-in installed).
@@ -8,7 +8,7 @@ puppet-openscap-0.3.0			2014-06-25
  - Introduced classes:
    - openscap::xccdf::foreman_audit
  
-puppet-openscap-0.2.0			2014-06-16
+puppet-openscap-0.2.0			2014-07-16
  - the module attempts to install its dependencies
  - introduced classes:
    - openscap
