@@ -1,12 +1,12 @@
 {
-  "name": "isimluk-openscap",
+  "name": "isimluk-foreman_scap_client",
   "version": "0.3.1",
   "author": "isimluk",
-  "summary": "This puppet module exposes OpenSCAP primitives to puppet DSL.",
+  "summary": "This puppet module configures foreman_scap_client.",
   "license": "GNU General Public License, version 2 (GPLv2)",
-  "source": "https://github.com/OpenSCAP/puppet-openscap.git",
-  "project_page": "https://github.com/OpenSCAP/puppet-openscap",
-  "issues_url": "https://github.com/OpenSCAP/puppet-openscap/issues",
+  "source": "https://github.com/OpenSCAP/puppet-foreman_scap_client.git",
+  "project_page": "https://github.com/OpenSCAP/puppet-foreman_scap_client",
+  "issues_url": "https://github.com/OpenSCAP/puppet-foreman_scap_client/issues",
   "dependencies": [
     { "name": "puppetlabs/stdlib",        "version_requirement": ">= 4.2.0" }
   ]
