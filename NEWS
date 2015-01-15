@@ -1,3 +1,5 @@
+# TODO - add rename info during ?0.4.0? release
+
 puppet-openscap-0.3.0			2014-07-25
  - All stored results are bzip2ed (~90% reduction of disc space)
  - Module can upload results to Foreman's Smart Proxy
