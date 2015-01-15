@@ -1,4 +1,6 @@
-# TODO - add rename info during ?0.4.0? release
+puppet-foreman_scap_client              2015-01-15
+ - new class foreman_scap_client introduced in body of puppet-openscap
+ - the puppet-openscap remains live in github.com/OpenSCAP/puppet-openscap
 
 puppet-openscap-0.3.0			2014-07-25
  - All stored results are bzip2ed (~90% reduction of disc space)
