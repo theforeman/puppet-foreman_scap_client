@@ -54,7 +54,7 @@ class foreman_scap_client(
   package { 'foreman_scap_client': } ->
   file { 'foreman_scap_client':
     path    => '/etc/foreman_scap_client/config.yaml',
-    content => template('openscap/config.yaml.erb'),
+    content => template('foreman_scap_client/config.yaml.erb'),
     owner   => 'root',
     ensure  => present,
   }
