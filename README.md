@@ -11,7 +11,7 @@ foreman_scap_client on the system.
 
 ```
 class { foreman_scap_client:
-  server => 'http://proxy.example.com',
+  server => 'proxy.example.com',
   policies => [ { "id" => 1, "hour" => "*", "minute" => "*", "month" => "*",
                   "monthday" => "*", "weekday" => "1", "profile_id" => '',
                   "content_path" => '/usr/share/xml/scap/ssg/fedora/ssg-fedora-ds.xml' } ]
