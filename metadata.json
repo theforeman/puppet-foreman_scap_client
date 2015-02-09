@@ -1,6 +1,6 @@
 {
   "name": "isimluk-foreman_scap_client",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "author": "isimluk",
   "summary": "This puppet module configures foreman_scap_client.",
   "license": "GNU General Public License, version 2 (GPLv2)",

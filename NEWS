@@ -1,3 +1,6 @@
+puppet-foreman_scap_client              2015-02-09
+ - bugfixes foreman_scap_client.cfg template distribution
+
 puppet-foreman_scap_client              2015-01-15
  - new class foreman_scap_client introduced in body of puppet-openscap
  - the puppet-openscap remains live in github.com/OpenSCAP/puppet-openscap
