@@ -51,7 +51,7 @@ class foreman_scap_client(
     }].to_yaml %>')
   $policies_data = parseyaml($policies_yaml)
 
-  package { 'foreman_scap_client': } ->
+  package { 'rubygem-foreman_scap_client': } ->
   file { 'foreman_scap_client':
     path    => '/etc/foreman_scap_client/config.yaml',
     content => template('foreman_scap_client/config.yaml.erb'),
