@@ -29,7 +29,7 @@
 #                     type:array
 class foreman_scap_client(
   $server,
-  $port             = '8443',
+  $port,
   $ca_file          = '/var/lib/puppet/ssl/certs/ca.pem',
   $host_certificate = "/var/lib/puppet/ssl/certs/${fqdn}.pem",
   $host_private_key = "/var/lib/puppet/ssl/private_keys/${fqdn}.pem",
