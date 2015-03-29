@@ -5,11 +5,18 @@
 :server: '<%= @server %>'
 :port: <%= @port %>
 
-# SSL specific options
+## SSL specific options ##
+# Client CA file.
+# It could be Puppet CA certificate (e.g., '/var/lib/puppet/ssl/certs/ca.pem')
+# Or (recommended for client reporting to Katello) subscription manager CA file, (e.g., '/etc/rhsm/ca/katello-server-ca.pem')
 :ca_file: '<%= @ca_file %>'
-# this client certificate, usually the same that puppet agent use
+# Client host certificate.
+# It could be Puppet agent host certificate (e.g., '/var/lib/puppet/ssl/certs/myhost.example.com.pem')
+# Or (recommended for client reporting to Katello) consumer certificate (e.g., '/etc/pki/consumer/cert.pem')
 :host_certificate: '<%= @host_certificate %>'
-# this client private key, usually the same that puppet agent use
+# Client private key
+# It could be Puppet agent private key (e.g., '/var/lib/puppet/ssl/private_keys/myhost.example.com.pem')
+# Or (recommended for client reporting to Katello) consumer private key (e.g., '/etc/pki/consumer/cert.pem')
 :host_private_key: '<%= @host_private_key %>'
 
 # policy (key is id as in Foreman)
