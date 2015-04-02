@@ -7,10 +7,13 @@
 # $port::             port of foreman proxy that is used as $server
 #
 # $ca_file::          path to file of certification authority that issued client's certificate
+#                     May be overriden if $::rh_certificate_repo_ca_file (from Facter) is found
 #
 # $host_certificate:: path to host certificate, usually puppet agent certificate
+#                     May be overriden if $::rh_certificate_consumer_host_cert (from Facter) is found
 #
 # $host_private_key:: path to host private key, usually puppet agent private key
+#                     May be overriden if $::rh_certificate_consumer_host_key (from Facter) is found
 #
 # $policies::         Array of policies that should be configured, each member represent
 #                     one policy in form of hash
@@ -30,11 +33,11 @@
 class foreman_scap_client(
   $server,
   $port,
-  $ca_file          = '/var/lib/puppet/ssl/certs/ca.pem',
-  $host_certificate = "/var/lib/puppet/ssl/certs/${fqdn}.pem",
-  $host_private_key = "/var/lib/puppet/ssl/private_keys/${fqdn}.pem",
+  $ca_file          = $::foreman_scap_client::params::ca_file,
+  $host_certificate = $::foreman_scap_client::params::host_certificate,
+  $host_private_key = $::foreman_scap_client::params::host_private_key,
   $policies,
-) {
+) inherits foreman_scap_client::params {
   $policies_array = flatten([$policies])
   $policies_yaml = inline_template('<%= Hash[policies_array.map { |p|
       ["foreman_scap_client_#{p["id"]}",
