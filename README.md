@@ -9,7 +9,7 @@ The following example ensures that every week an SCAP audit is executed and the 
 are sent to proxy at proxy.example.com. The example will automatically attempt to install
 foreman_scap_client on the system.
 
-```
+```puppet
 class { foreman_scap_client:
   server => 'proxy.example.com',
   port => '8443',
