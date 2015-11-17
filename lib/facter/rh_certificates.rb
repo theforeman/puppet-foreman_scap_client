@@ -7,7 +7,7 @@ def extract_certificates_from_subscription_manager
   return nil if data.nil?
   data = data.gsub("\n", "").gsub(/[\[\]]/, "")
   data_array = data.scan(/(\S+)\s*=\s* ([^ ]+)/)
-  data_hash = Hash[data_array]
+  data_hash = Hash[*data_array.flatten]
   consumer_cert_dir = data_hash["consumercertdir"]
   certificates[:repo_ca_cert]          = data_hash["repo_ca_cert"] unless data_hash["repo_ca_cert"] == rh_default_ca_cert
   certificates[:host_certificate_path] = consumer_cert_dir + certificate_end_path
