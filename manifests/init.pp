@@ -42,7 +42,7 @@ class foreman_scap_client(
   $policies_yaml = inline_template('<%= Hash[policies_array.map { |p|
       ["foreman_scap_client_#{p["id"]}",
         {
-          "command" => "/usr/bin/foreman_scap_client #{p[\'id\']}",
+          "command" => "/usr/bin/foreman_scap_client #{p[\'id\']} 2>&1",
           "user" => "root",
           "hour" => p["hour"],
           "minute" => p["minute"],
