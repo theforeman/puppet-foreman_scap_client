@@ -1,3 +1,8 @@
+puppet-foreman_scap_client-0.3.8	2016-01-11
+ - Support vintage ruby interpreters
+ - The command output shall go to /dev/null
+ - fix the documentation typo
+
 puppet-foreman_scap_client-0.3.7	2015-05-07
  - Support for content automated content fetching
 
