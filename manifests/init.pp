@@ -2,6 +2,9 @@
 #
 # === Parameters:
 #
+# $ensure::           Passed to the rubygem-foreman_scap_client package.
+#                     Default: present
+#
 # $server::           foreman proxy url where arf reports should be sent
 #
 # $port::             port of foreman proxy that is used as $server
@@ -31,6 +34,7 @@
 #                     even specify just one policy as a hash
 #                     type:array
 class foreman_scap_client(
+  $ensure           = 'present',
   $server,
   $port,
   $ca_file          = $::foreman_scap_client::params::ca_file,
@@ -54,7 +58,7 @@ class foreman_scap_client(
     }].to_yaml %>')
   $policies_data = parseyaml($policies_yaml)
 
-  package { 'rubygem-foreman_scap_client': } ->
+  package { 'rubygem-foreman_scap_client': ensure => $ensure, } ->
   file { 'foreman_scap_client':
     path    => '/etc/foreman_scap_client/config.yaml',
     content => template('foreman_scap_client/config.yaml.erb'),
