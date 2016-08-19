@@ -44,7 +44,7 @@ class foreman_scap_client(
 ) inherits foreman_scap_client::params {
   $policies_array = flatten([$policies])
   $policies_yaml = inline_template('<%= Hash[policies_array.map { |p|
-      ["foreman_scap_client_#{p["id"]}",
+      ["foreman_scap_client",
         {
           "command" => "/usr/bin/foreman_scap_client #{p[\'id\']} > /dev/null",
           "user" => "root",
