@@ -1,12 +1,12 @@
 {
-  "name": "isimluk-foreman_scap_client",
+  "name": "theforeman-foreman_scap_client",
   "version": "0.3.8",
-  "author": "isimluk",
+  "author": "theforeman",
   "summary": "This puppet module configures foreman_scap_client.",
   "license": "GNU General Public License, version 2 (GPLv2)",
-  "source": "https://github.com/OpenSCAP/puppet-foreman_scap_client.git",
-  "project_page": "https://github.com/OpenSCAP/puppet-foreman_scap_client",
-  "issues_url": "https://github.com/OpenSCAP/puppet-foreman_scap_client/issues",
+  "source": "https://github.com/theforeman/puppet-foreman_scap_client.git",
+  "project_page": "https://github.com/theforeman/puppet-foreman_scap_client",
+  "issues_url": "https://github.com/theforeman/puppet-foreman_scap_client/issues",
   "dependencies": [
     { "name": "puppetlabs/stdlib",        "version_requirement": ">= 4.2.0" }
   ]
