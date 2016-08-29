@@ -42,21 +42,6 @@ class foreman_scap_client(
   $host_private_key = $::foreman_scap_client::params::host_private_key,
   $policies,
 ) inherits foreman_scap_client::params {
-  $policies_array = flatten([$policies])
-  $policies_yaml = inline_template('<%= Hash[policies_array.map { |p|
-      ["foreman_scap_client_#{p["id"]}",
-        {
-          "command" => "/usr/bin/foreman_scap_client #{p[\'id\']} > /dev/null",
-          "user" => "root",
-          "hour" => p["hour"],
-          "minute" => p["minute"],
-          "month" => p["month"],
-          "monthday" => p["monthday"],
-          "weekday" => p["weekday"],
-        }
-      ]
-    }].to_yaml %>')
-  $policies_data = parseyaml($policies_yaml)
 
   package { 'rubygem-foreman_scap_client': ensure => $ensure, } ->
   file { 'foreman_scap_client':
@@ -66,5 +51,17 @@ class foreman_scap_client(
     ensure  => present,
   }
 
-  create_resources(cron, $policies_data)
+  file { 'foreman_scap_client_cron':
+    path    => '/etc/cron.d/foreman_scap_client_cron',
+    content => template('foreman_scap_client/cron.erb'),
+    owner   => 'root',
+    ensure  => present,
+  }
+
+  # Remove crons previously installed here
+  exec { 'remove_foreman_scap_client_cron':
+    command => "sed -i '/foreman_scap_client/d' /var/spool/cron/root",
+    onlyif  => "grep -c 'foreman_scap_client' /var/spool/cron/root",
+    path    => "/usr/bin",
+  }
 }
