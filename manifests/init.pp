@@ -62,6 +62,6 @@ class foreman_scap_client(
   exec { 'remove_foreman_scap_client_cron':
     command => "sed -i '/foreman_scap_client/d' /var/spool/cron/root",
     onlyif  => "grep -c 'foreman_scap_client' /var/spool/cron/root",
-    path    => "/usr/bin",
+    path    => "/bin:/usr/bin",
   }
 }
