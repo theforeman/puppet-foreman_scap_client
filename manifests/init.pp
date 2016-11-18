@@ -24,7 +24,9 @@
 #
 #                       { "id" => 1, "hour" => "*", "minute" => "*", "month" => "*",
 #                         "monthday" => "*", "weekday" => "*", "profile_id" => '',
-#                         "content_path" => '/usr/share/...' }
+#                         "content_path" => '/usr/share/...',
+#                         "tailoring_path" => '/var/lib...'
+#                       }
 #
 #                     note that profile_id may be empty (for default profile)
 #                     id is number representing id of policy in foreman
