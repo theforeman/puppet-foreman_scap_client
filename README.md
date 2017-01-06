@@ -22,7 +22,8 @@ For detailed info on the parameters see documentation on manifests/init.pp & man
 
 The following example ensures that every week an SCAP audit is executed and the results
 are sent to proxy at proxy.example.com. The example will automatically attempt to install
-foreman_scap_client on the system.
+foreman_scap_client on the system. If you do not wish to use your tailoring file with policy,
+just pass empty string to "tailoring_path".
 
 ```puppet
 class { foreman_scap_client:
@@ -31,6 +32,8 @@ class { foreman_scap_client:
   policies => [ { "id" => 1, "hour" => "*", "minute" => "*", "month" => "*",
                   "monthday" => "*", "weekday" => "1", "profile_id" => '',
                   "content_path" => '/usr/share/xml/scap/ssg/fedora/ssg-fedora-ds.xml',
-                  "download_path => '/compliance/policies/1/content' } ]
+                  "download_path => '/compliance/policies/1/content',
+                  "tailoring_path" => '/var/lib/openacap/ssg-fedora-ds-tailored.xml',
+                  "tailoring_download_path" => "/compliance/policies/1/tailoring" } ]
 }
 ```
