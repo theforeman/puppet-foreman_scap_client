@@ -18,6 +18,15 @@
 # $host_private_key:: path to host private key, usually puppet agent private key
 #                     May be overriden if $::rh_certificate_consumer_host_key (from Facter) is found
 #
+# $foreman_repo_rel:: add / manage foreman-plugins yum repo and set to release version. Eg  '1.14'
+#
+# $foreman_repo_key:: RPM Key source file for foreman-plugins repo. Note: Currently, packages are not signed.
+#                     Unless set to an alternative file source, URL will be used.
+#
+# foreman_repo_src::  Alternative baseurl for The Foreman plugins repository
+#
+# foreman_repo_gpg_chk:: Enable / disable GPG checks. Directly passed to Yumrepo resource
+#
 # $policies::         Array of policies that should be configured, each member represent
 #                     one policy in form of hash
 #                     Policy hash must have following structure
@@ -36,14 +45,54 @@
 #                     even specify just one policy as a hash
 #                     type:array
 class foreman_scap_client(
-  $ensure           = 'present',
   $server,
   $port,
-  $ca_file          = $::foreman_scap_client::params::ca_file,
-  $host_certificate = $::foreman_scap_client::params::host_certificate,
-  $host_private_key = $::foreman_scap_client::params::host_private_key,
   $policies,
+  $ensure               = 'present',
+  $ca_file              = $::foreman_scap_client::params::ca_file,
+  $host_certificate     = $::foreman_scap_client::params::host_certificate,
+  $host_private_key     = $::foreman_scap_client::params::host_private_key,
+  $foreman_repo_rel     = undef,
+  $foreman_repo_key     = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
+  $foreman_repo_src     = undef,
+  $foreman_repo_gpg_chk = false,
 ) inherits foreman_scap_client::params {
+
+  if $foreman_repo_rel {
+
+    unless $foreman_repo_key =~ /^http/ {
+      $gpgkey_file = '/etc/pki/rpm-gpg/RPM-GPG-KEY-foreman'
+      $gpgkey = "file://${gpgkey_file}"
+
+      file { $gpgkey_file:
+        ensure => present,
+        source => $foreman_repo_key,
+        mode   => '0644',
+        before => Yumrepo['foreman-plugins'],
+      }
+    } else {
+       $gpgkey = $foreman_repo_key
+    }
+
+    if $foreman_repo_src {
+      $baseurl = $foreman_repo_src
+    } else {
+      $_osfamily = $::osfamily? {
+        'Fedora' => 'f',
+         default => 'el'
+      }
+      $baseurl = "http://yum.theforeman.org/plugins/${foreman_repo_rel}/${_osfamily}${::operatingsystemmajrelease}/\$basearch"
+    }
+
+    yumrepo { 'foreman-plugins':
+      ensure   => present,
+      descr    => "Foreman plugins ${foreman_repo_rel}",
+      baseurl  => $baseurl,
+      gpgkey   => $gpgkey,
+      gpgcheck => $foreman_repo_gpg_chk,
+      before   => Package['rubygem-foreman_scap_client']
+    }
+  }
 
   package { 'rubygem-foreman_scap_client': ensure => $ensure, } ->
   file { 'foreman_scap_client':
