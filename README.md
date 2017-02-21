@@ -56,3 +56,13 @@ class { foreman_scap_client:
 When using this module together with [foreman_openscap](https://theforeman.org/plugins/foreman_openscap/), no further configuration
  should be necessary as values are by Foreman's ENC. However, verify the values for server, port and policies after
  importing the class; the policies should be `<%= @host.policies_enc %>`
+
+
+### Releasing on puppet forge
+
+We use project blacksmith to do the release. All you need to do is configuring theforeman
+credentials in ~/.puppetforge.yml and then call release task from upstream repo like this
+
+```
+bundle exec rake module:release
+```
