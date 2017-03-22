@@ -60,7 +60,9 @@ class foreman_scap_client(
 
   if $foreman_repo_rel {
 
-    unless $foreman_repo_key =~ /^http/ {
+    if $foreman_repo_key =~ /^http/ {
+      $gpgkey = $foreman_repo_key
+    } else {
       $gpgkey_file = '/etc/pki/rpm-gpg/RPM-GPG-KEY-foreman'
       $gpgkey = "file://${gpgkey_file}"
 
@@ -70,8 +72,6 @@ class foreman_scap_client(
         mode   => '0644',
         before => Yumrepo['foreman-plugins'],
       }
-    } else {
-       $gpgkey = $foreman_repo_key
     }
 
     if $foreman_repo_src {
