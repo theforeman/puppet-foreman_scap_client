@@ -79,7 +79,7 @@ class foreman_scap_client(
     } else {
       $_osfamily = $::osfamily? {
         'Fedora' => 'f',
-         default => 'el'
+        default => 'el'
       }
       $baseurl = "http://yum.theforeman.org/plugins/${foreman_repo_rel}/${_osfamily}${::operatingsystemmajrelease}/\$basearch"
     }
@@ -96,23 +96,23 @@ class foreman_scap_client(
 
   package { 'rubygem-foreman_scap_client': ensure => $ensure, } ->
   file { 'foreman_scap_client':
+    ensure  => present,
     path    => '/etc/foreman_scap_client/config.yaml',
     content => template('foreman_scap_client/config.yaml.erb'),
     owner   => 'root',
-    ensure  => present,
   }
 
   file { 'foreman_scap_client_cron':
+    ensure  => present,
     path    => '/etc/cron.d/foreman_scap_client_cron',
     content => template('foreman_scap_client/cron.erb'),
     owner   => 'root',
-    ensure  => present,
   }
 
   # Remove crons previously installed here
   exec { 'remove_foreman_scap_client_cron':
     command => "sed -i '/foreman_scap_client/d' /var/spool/cron/root",
     onlyif  => "grep -c 'foreman_scap_client' /var/spool/cron/root",
-    path    => "/bin:/usr/bin",
+    path    => '/bin:/usr/bin',
   }
 }

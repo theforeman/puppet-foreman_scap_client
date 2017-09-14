@@ -1,16 +1,22 @@
 {
   "name": "theforeman-foreman_scap_client",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "author": "theforeman",
   "summary": "This puppet module configures foreman_scap_client.",
-  "license": "GNU General Public License, version 2 (GPLv2)",
+  "license": "GPL-2.0",
   "source": "https://github.com/theforeman/puppet-foreman_scap_client.git",
   "project_page": "https://github.com/theforeman/puppet-foreman_scap_client",
   "issues_url": "https://github.com/theforeman/puppet-foreman_scap_client/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease" : [ "6.x", "7.x" ]
+    }
+  ],
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.2.0"
+      "version_requirement": ">= 4.2.0 < 5.0.0"
     }
   ]
 }
