@@ -12,7 +12,7 @@
       "operatingsystem": "RedHat",
       "operatingsystemrelease" : [ "6.x", "7.x" ]
     }
-  ]
+  ],
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
