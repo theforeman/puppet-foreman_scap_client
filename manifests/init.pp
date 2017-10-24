@@ -4,6 +4,8 @@
 #
 # $ensure::           Passed to the rubygem-foreman_scap_client package.
 #                     Default: present
+# 
+# $install_options::  Passed to the rubygem-foreman_scap_client package. 
 #
 # $server::           foreman proxy url where arf reports should be sent
 #
@@ -49,6 +51,7 @@ class foreman_scap_client(
   $port,
   $policies,
   $ensure               = 'present',
+  $install_options      = undef,
   $ca_file              = $::foreman_scap_client::params::ca_file,
   $host_certificate     = $::foreman_scap_client::params::host_certificate,
   $host_private_key     = $::foreman_scap_client::params::host_private_key,
@@ -94,7 +97,7 @@ class foreman_scap_client(
     }
   }
 
-  package { 'rubygem-foreman_scap_client': ensure => $ensure, } ->
+  package { 'rubygem-foreman_scap_client': ensure => $ensure, install_options => $install_options, } ->
   file { 'foreman_scap_client':
     ensure  => present,
     path    => '/etc/foreman_scap_client/config.yaml',
