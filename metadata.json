@@ -1,6 +1,6 @@
 {
   "name": "theforeman-foreman_scap_client",
-  "version": "0.3.18",
+  "version": "0.3.19",
   "author": "theforeman",
   "summary": "This puppet module configures foreman_scap_client.",
   "license": "GPL-2.0",
@@ -10,7 +10,10 @@
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease" : [ "6.x", "7.x" ]
+      "operatingsystemrelease": [
+        "6.x",
+        "7.x"
+      ]
     }
   ],
   "dependencies": [
