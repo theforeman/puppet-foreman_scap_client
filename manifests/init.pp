@@ -44,6 +44,11 @@
 #                     if it's not array, it's automatically converted to it, so you can
 #                     even specify just one policy as a hash
 #                     type:array
+# $fetch_remote_resources:: Enable / disable --fetch-remote-resources when running oscap scan
+#
+# $http_proxy_server:: hostname or IP address of http proxy server to use with --fetch-remote-resources.
+#
+# $http_proxy_port::   port of http proxy server to use with --fetch-remote-resources.
 class foreman_scap_client(
   $server,
   $port,
@@ -56,8 +61,16 @@ class foreman_scap_client(
   $foreman_repo_key     = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
   $foreman_repo_src     = undef,
   $foreman_repo_gpg_chk = false,
+  Boolean $fetch_remote_resources = false,
+  Optional[String[1]]         $http_proxy_server = undef,
+  Optional[Integer[0, 65535]] $http_proxy_port   = undef,
 ) inherits foreman_scap_client::params {
 
+  if $http_proxy_server or $http_proxy_port {
+    # If either of the 2 proxy parameters are set, they should both be set (not undef).
+    assert_type(String[1], $http_proxy_server)
+    assert_type(Integer[0, 65535], $http_proxy_port)
+  }
   if $foreman_repo_rel {
 
     if $foreman_repo_key =~ /^http/ {
