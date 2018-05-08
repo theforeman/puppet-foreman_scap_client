@@ -56,6 +56,7 @@ class foreman_scap_client(
   $foreman_repo_key     = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
   $foreman_repo_src     = undef,
   $foreman_repo_gpg_chk = false,
+  $cron_template        = 'foreman_scap_client/cron.erb',
 ) inherits foreman_scap_client::params {
 
   if $foreman_repo_rel {
@@ -105,7 +106,7 @@ class foreman_scap_client(
   file { 'foreman_scap_client_cron':
     ensure  => present,
     path    => '/etc/cron.d/foreman_scap_client_cron',
-    content => template('foreman_scap_client/cron.erb'),
+    content => template($cron_template),
     owner   => 'root',
   }
 
