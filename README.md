@@ -22,6 +22,9 @@ of foreman_scap_client.
   Unless set to an alternative file source, URL will be used.
 * 'foreman_repo_src':  Alternative baseurl for The Foreman plugins repository
 * 'foreman_repo_gpg_chk': Enable / disable GPG checks. Directly passed to Yumrepo resource
+* 'fetch_remote_resources': Enable / disable --fetch-remote-resources when running oscap scan.
+* 'http_proxy_server': hostname or IP address of http proxy server to use with --fetch-remote-resources.
+* 'http_proxy_port': port of http proxy server to use with --fetch-remote-resources.
 
 For detailed info on the parameters see documentation on manifests/init.pp & manifests/params.pp
 
@@ -34,11 +37,14 @@ just pass empty string to "tailoring_path".
 
 ```puppet
 class { foreman_scap_client:
-  server           => 'proxy.example.com',
-  port             => '8443',
-  foreman_repo_rel => '1.14',
-  foreman_repo_key => '/net/share/foreman-gpg-rpm-key',
-  policies         => [{
+  server                 => 'proxy.example.com',
+  port                   => '8443',
+  fetch_remote_resources => true,
+  http_proxy_server      => 'squid.example.com',
+  http_proxy_port        => 3128,
+  foreman_repo_rel       => '1.14',
+  foreman_repo_key       => '/net/share/foreman-gpg-rpm-key',
+  policies               => [{
     "id"                      => 1,
     "hour"                    => "12",
     "minute"                  => "1",
