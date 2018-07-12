@@ -5,6 +5,13 @@
 :server: '<%= @server %>'
 :port: <%= @port %>
 
+# Should --fetch-remote-resources be added to `oscap xccdf eval` command
+:fetch_remote_resources: <%= @fetch_remote_resources %>
+
+# HTTP proxy server for downloading remote resources
+:http_proxy_server: <%= @http_proxy_server %>
+:http_proxy_port: <%= @http_proxy_port %>
+
 ## SSL specific options ##
 # Client CA file.
 # It could be Puppet CA certificate (e.g., '/var/lib/puppet/ssl/certs/ca.pem')
