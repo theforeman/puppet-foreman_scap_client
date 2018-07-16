@@ -50,15 +50,19 @@ class foreman_scap_client(
   $server,
   $port,
   $policies,
-  $ensure               = 'present',
-  $install_options      = undef,
-  $ca_file              = $::foreman_scap_client::params::ca_file,
-  $host_certificate     = $::foreman_scap_client::params::host_certificate,
-  $host_private_key     = $::foreman_scap_client::params::host_private_key,
-  $foreman_repo_rel     = undef,
-  $foreman_repo_key     = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
-  $foreman_repo_src     = undef,
-  $foreman_repo_gpg_chk = false,
+  $ensure                 = 'present',
+  $fetch_remote_resources = false,
+  $http_proxy_server      = undef,
+  $http_proxy_port        = undef,
+  $ca_file                = $::foreman_scap_client::params::ca_file,
+  $host_certificate       = $::foreman_scap_client::params::host_certificate,
+  $host_private_key       = $::foreman_scap_client::params::host_private_key,
+  $foreman_repo_rel       = undef,
+  $foreman_repo_key       = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
+  $foreman_repo_src       = undef,
+  $foreman_repo_gpg_chk   = false,
+  $install_options        = undef,
+  $cron_template          = 'foreman_scap_client/cron.erb',
 ) inherits foreman_scap_client::params {
 
   if $foreman_repo_rel {
@@ -108,7 +112,7 @@ class foreman_scap_client(
   file { 'foreman_scap_client_cron':
     ensure  => present,
     path    => '/etc/cron.d/foreman_scap_client_cron',
-    content => template('foreman_scap_client/cron.erb'),
+    content => template($cron_template),
     owner   => 'root',
   }
 
