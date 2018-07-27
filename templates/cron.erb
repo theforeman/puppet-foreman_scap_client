@@ -8,5 +8,5 @@
 # foreman_scap_client cron job
 <% @policies.each do |policy| %>
 <%= "# Runs foreman_scap_client #{policy['id']}" %>
-<%= policy['minute'] %> <%= policy['hour'] %> <%= policy['monthday'] %> <%= policy['month'] %> <%= policy['weekday'] %> root <%=  "/usr/bin/foreman_scap_client #{policy['id']} 2>&1 | logger -t foreman_scap_client"%>
+<%= policy['minute'] %> <%= policy['hour'] %> <%= policy['monthday'] %> <%= policy['month'] %> <%= policy['weekday'] %> root /bin/sleep <%= @cron_sleep %> ; /usr/bin/foreman_scap_client <%= policy['id'] %> 2>&1 | logger -t foreman_scap_client
 <% end %>

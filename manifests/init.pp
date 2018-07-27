@@ -63,7 +63,10 @@ class foreman_scap_client(
   $foreman_repo_gpg_chk   = false,
   $install_options        = undef,
   $cron_template          = 'foreman_scap_client/cron.erb',
+  $cron_splay             = 600,
 ) inherits foreman_scap_client::params {
+
+  $cron_sleep = fqdn_rand($cron_splay)
 
   if $foreman_repo_rel {
 
