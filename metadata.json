@@ -1,6 +1,6 @@
 {
   "name": "theforeman-foreman_scap_client",
-  "version": "0.3.19",
+  "version": "0.3.20",
   "author": "theforeman",
   "summary": "This puppet module configures foreman_scap_client.",
   "license": "GPL-2.0",
