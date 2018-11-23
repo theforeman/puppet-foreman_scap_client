@@ -20,6 +20,8 @@
 # $host_private_key:: path to host private key, usually puppet agent private key
 #                     May be overriden if $::rh_certificate_consumer_host_key (from Facter) is found
 #
+# $package_name ::    os dependent package name for rubygem-foreman_scap_client package
+#
 # $foreman_repo_rel:: add / manage foreman-plugins yum repo and set to release version. Eg  '1.14'
 #
 # $foreman_repo_key:: RPM Key source file for foreman-plugins repo. Note: Currently, packages are not signed.
@@ -46,6 +48,7 @@
 #                     if it's not array, it's automatically converted to it, so you can
 #                     even specify just one policy as a hash
 #                     type:array
+#                     
 class foreman_scap_client(
   $server,
   $port,
@@ -57,6 +60,7 @@ class foreman_scap_client(
   $ca_file                = $::foreman_scap_client::params::ca_file,
   $host_certificate       = $::foreman_scap_client::params::host_certificate,
   $host_private_key       = $::foreman_scap_client::params::host_private_key,
+  $package_name           = $::foreman_scap_client::params::package_name,
   $foreman_repo_rel       = undef,
   $foreman_repo_key       = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
   $foreman_repo_src       = undef,
@@ -65,7 +69,6 @@ class foreman_scap_client(
   $cron_template          = 'foreman_scap_client/cron.erb',
   $cron_splay             = 600,
 ) inherits foreman_scap_client::params {
-
   $cron_sleep = fqdn_rand($cron_splay)
 
   if $foreman_repo_rel {
@@ -100,11 +103,20 @@ class foreman_scap_client(
       baseurl  => $baseurl,
       gpgkey   => $gpgkey,
       gpgcheck => $foreman_repo_gpg_chk,
-      before   => Package['rubygem-foreman_scap_client']
+      before   => Package[$package_name]
     }
   }
 
-  package { 'rubygem-foreman_scap_client': ensure => $ensure, install_options => $install_options, } ->
+  package { 'foreman_scap_client':
+    ensure          => $ensure,
+    install_options => $install_options,
+    name            => $package_name
+  }
+  -> file { '/etc/foreman_scap_client':
+    ensure => directory,
+    owner  => 'root',
+  }
+
   file { 'foreman_scap_client':
     ensure  => present,
     path    => '/etc/foreman_scap_client/config.yaml',
