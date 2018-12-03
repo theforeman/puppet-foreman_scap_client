@@ -1,0 +1,14 @@
+---
+bundler_args: --without system_tests development
+sudo: false
+matrix:
+  fast_finish: true
+  include:
+    - rvm: 2.0.0
+      env: PUPPET_VERSION=3.8
+    - rvm: 2.1.9
+      env: PUPPET_VERSION=4.9
+    - rvm: 2.4.1
+      env: PUPPET_VERSION=5.0
+    - rvm: 2.5.1
+      env: PUPPET_VERSION=6.0
