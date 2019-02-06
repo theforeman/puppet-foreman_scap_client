@@ -4,8 +4,8 @@
 #
 # $ensure::           Passed to the rubygem-foreman_scap_client package.
 #                     Default: present
-# 
-# $install_options::  Passed to the rubygem-foreman_scap_client package. 
+#
+# $install_options::  Passed to the rubygem-foreman_scap_client package.
 #
 # $server::           foreman proxy url where arf reports should be sent
 #
@@ -48,7 +48,17 @@
 #                     if it's not array, it's automatically converted to it, so you can
 #                     even specify just one policy as a hash
 #                     type:array
-#                     
+#
+# $cron_template::    Path to cron template
+#
+# $cron_splay::       Upper limit for splay time when sending reports to proxy
+#
+# $http_proxy_server:: HTTP proxy server
+#
+# $http_proxy_port::  HTTP proxy port
+#
+# $fetch_remote_resources:: Whether client should fetch referenced resources that are remote
+#
 class foreman_scap_client(
   $server,
   $port,
