@@ -22,6 +22,12 @@ of foreman_scap_client.
   Unless set to an alternative file source, URL will be used.
 * 'foreman_repo_src':  Alternative baseurl for The Foreman plugins repository
 * 'foreman_repo_gpg_chk': Enable / disable GPG checks. Directly passed to Yumrepo resource
+* 'install_options': Additional options for client package installation
+* 'cron_template': Path to cron template
+* 'cron_splay': Upper limit for splay time when sending reports to proxy
+* 'fetch_remote_resources': Whether client should fetch referenced resources that are remote
+* 'http_proxy_server': HTTP proxy server
+* 'http_proxy_port': HTTP proxy port
 
 For detailed info on the parameters see documentation on manifests/init.pp & manifests/params.pp
 
