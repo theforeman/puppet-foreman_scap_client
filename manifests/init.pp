@@ -59,6 +59,8 @@
 #
 # $fetch_remote_resources:: Whether client should fetch referenced resources that are remote
 #
+# $timeout:: Timeout when sending reports to proxy
+#
 class foreman_scap_client(
   $server,
   $port,
@@ -78,6 +80,7 @@ class foreman_scap_client(
   $install_options        = undef,
   $cron_template          = 'foreman_scap_client/cron.erb',
   $cron_splay             = 600,
+  $timeout                = 60,
 ) inherits foreman_scap_client::params {
   $cron_sleep = fqdn_rand($cron_splay)
 
