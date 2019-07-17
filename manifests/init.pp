@@ -120,10 +120,9 @@ class foreman_scap_client(
     }
   }
 
-  package { 'foreman_scap_client':
+  package { $package_name:
     ensure          => $ensure,
     install_options => $install_options,
-    name            => $package_name
   }
   -> file { '/etc/foreman_scap_client':
     ensure => directory,
