@@ -107,12 +107,18 @@ class foreman_scap_client(
         'Fedora' => 'f',
         default => 'el'
       }
-      $baseurl = "http://yum.theforeman.org/plugins/${foreman_repo_rel}/${_osfamily}${::operatingsystemmajrelease}/\$basearch"
+      $baseurl = "http://yum.theforeman.org/client/${foreman_repo_rel}/${_osfamily}${::operatingsystemmajrelease}/\$basearch"
     }
 
-    yumrepo { 'foreman-plugins':
+    if versioncmp($foreman_repo_rel, '1.20') >= 0 {
+      $_reposuffix = 'client'
+    } else {
+      $_reposuffix = 'plugins'
+    }
+
+    yumrepo { "foreman-${_reposuffix}":
       ensure   => present,
-      descr    => "Foreman plugins ${foreman_repo_rel}",
+      descr    => "Foreman ${_reposuffix} ${foreman_repo_rel}",
       baseurl  => $baseurl,
       gpgkey   => $gpgkey,
       gpgcheck => $foreman_repo_gpg_chk,
