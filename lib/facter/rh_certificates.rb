@@ -3,7 +3,7 @@ def extract_certificates_from_subscription_manager
   certificate_end_path = '/cert.pem'
   private_key_end_path = '/key.pem'
   rh_default_ca_cert = '/etc/rhsm/ca/redhat-uep.pem'
-  data = Facter::Util::Resolution.exec('subscription-manager config')
+  data = Facter::Util::Resolution.exec('/usr/sbin/subscription-manager config')
   return nil if data.nil? || data.empty?
   data = data.gsub("\n", "").gsub(/[\[\]]/, "")
   data_array = data.scan(/(\S+)\s*=\s* ([^ ]+)/)
