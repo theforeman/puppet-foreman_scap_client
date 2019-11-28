@@ -1,86 +1,120 @@
-# Configures foreman_scap_client and sets cron tasks to run it
+# @summary Configures foreman_scap_client and sets cron tasks to run it
 #
-# === Parameters:
+# @param ensure
+#   Passed to the rubygem-foreman_scap_client package.
 #
-# $ensure::           Passed to the rubygem-foreman_scap_client package.
-#                     Default: present
+# @param install_options
+#   Passed to the rubygem-foreman_scap_client package.
 #
-# $install_options::  Passed to the rubygem-foreman_scap_client package.
+# @param server
+#   foreman proxy url where arf reports should be sent
 #
-# $server::           foreman proxy url where arf reports should be sent
+# @param port
+#   port of foreman proxy that is used as $server
 #
-# $port::             port of foreman proxy that is used as $server
+# @param ca_file
+#   path to file of certification authority that issued client's certificate
+#   May be overriden if $::rh_certificate_repo_ca_file (from Facter) is found
 #
-# $ca_file::          path to file of certification authority that issued client's certificate
-#                     May be overriden if $::rh_certificate_repo_ca_file (from Facter) is found
+# @param host_certificate
+#   path to host certificate, usually puppet agent certificate
+#   May be overriden if $::rh_certificate_consumer_host_cert (from Facter) is found
 #
-# $host_certificate:: path to host certificate, usually puppet agent certificate
-#                     May be overriden if $::rh_certificate_consumer_host_cert (from Facter) is found
+# @param host_private_key
+#   path to host private key, usually puppet agent private key
+#   May be overriden if $::rh_certificate_consumer_host_key (from Facter) is found
 #
-# $host_private_key:: path to host private key, usually puppet agent private key
-#                     May be overriden if $::rh_certificate_consumer_host_key (from Facter) is found
+# @param package_name
+#   os dependent package name for rubygem-foreman_scap_client package
 #
-# $package_name ::    os dependent package name for rubygem-foreman_scap_client package
+# @param foreman_repo_rel
+#   add / manage foreman-plugins yum repo and set to release version. Eg  '1.14'
 #
-# $foreman_repo_rel:: add / manage foreman-plugins yum repo and set to release version. Eg  '1.14'
+# @param foreman_repo_key
+#   RPM Key source file for foreman-plugins repo. Note: Currently, packages are not signed.
+#   Unless set to an alternative file source, URL will be used.
 #
-# $foreman_repo_key:: RPM Key source file for foreman-plugins repo. Note: Currently, packages are not signed.
-#                     Unless set to an alternative file source, URL will be used.
+# @param foreman_repo_src
+#   Alternative baseurl for The Foreman plugins repository
 #
-# foreman_repo_src::  Alternative baseurl for The Foreman plugins repository
+# @param foreman_repo_gpg_chk
+#   Enable / disable GPG checks. Directly passed to Yumrepo resource
 #
-# foreman_repo_gpg_chk:: Enable / disable GPG checks. Directly passed to Yumrepo resource
+# @param policies
+#   Array of policies that should be configured, each member represent
+#   one policy in form of hash
+#   Policy hash must have following structure
 #
-# $policies::         Array of policies that should be configured, each member represent
-#                     one policy in form of hash
-#                     Policy hash must have following structure
+#   { "id" => 1, "hour" => "*", "minute" => "*", "month" => "*",
+#     "monthday" => "*", "weekday" => "*", "profile_id" => '',
+#     "content_path" => '/usr/share/...',
+#     "tailoring_path" => '/var/lib...'
+#   }
 #
-#                       { "id" => 1, "hour" => "*", "minute" => "*", "month" => "*",
-#                         "monthday" => "*", "weekday" => "*", "profile_id" => '',
-#                         "content_path" => '/usr/share/...',
-#                         "tailoring_path" => '/var/lib...'
-#                       }
+#   note that profile_id may be empty (for default profile)
+#   id is number representing id of policy in foreman
+#   content_path is path to DS file that contains profile
 #
-#                     note that profile_id may be empty (for default profile)
-#                     id is number representing id of policy in foreman
-#                     content_path is path to DS file that contains profile
+#   if it's not array, it's automatically converted to it, so you can
+#   even specify just one policy as a hash
 #
-#                     if it's not array, it's automatically converted to it, so you can
-#                     even specify just one policy as a hash
-#                     type:array
+# @param cron_template
+#   Path to cron template
 #
-# $cron_template::    Path to cron template
+# @param cron_splay
+#   Upper limit for splay time when sending reports to proxy
 #
-# $cron_splay::       Upper limit for splay time when sending reports to proxy
+# @param http_proxy_server
+#   HTTP proxy server
 #
-# $http_proxy_server:: HTTP proxy server
+# @param http_proxy_port
+#   HTTP proxy port
 #
-# $http_proxy_port::  HTTP proxy port
+# @param fetch_remote_resources
+#   Whether client should fetch referenced resources that are remote
 #
-# $fetch_remote_resources:: Whether client should fetch referenced resources that are remote
+# @param timeout
+#   Timeout when sending reports to proxy
 #
-# $timeout:: Timeout when sending reports to proxy
-#
+# @example Run a weekly SCAP audit
+#   class { foreman_scap_client:
+#     server           => 'proxy.example.com',
+#     port             => '8443',
+#     foreman_repo_rel => '1.24',
+#     policies         => [{
+#       "id"                      => 1,
+#       "hour"                    => "12",
+#       "minute"                  => "1",
+#       "month"                   => "*",
+#       "monthday"                => "*",
+#       "weekday"                 => "1",
+#       "profile_id"              => '',
+#       "content_path"            => '/usr/share/xml/scap/ssg/fedora/ssg-fedora-ds.xml',
+#       "download_path"           => '/compliance/policies/1/content',
+#       "tailoring_path"          => '/var/lib/openacap/ssg-fedora-ds-tailored.xml',
+#       "tailoring_download_path" => "/compliance/policies/1/tailoring"
+#     }]
+#   }
 class foreman_scap_client(
-  $server,
-  $port,
-  $policies,
-  $ensure                 = 'present',
-  $fetch_remote_resources = false,
-  $http_proxy_server      = undef,
-  $http_proxy_port        = undef,
-  $ca_file                = $::foreman_scap_client::params::ca_file,
-  $host_certificate       = $::foreman_scap_client::params::host_certificate,
-  $host_private_key       = $::foreman_scap_client::params::host_private_key,
-  $package_name           = $::foreman_scap_client::params::package_name,
-  $foreman_repo_rel       = undef,
-  $foreman_repo_key       = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
-  $foreman_repo_src       = undef,
-  $foreman_repo_gpg_chk   = false,
-  $install_options        = undef,
-  $cron_template          = 'foreman_scap_client/cron.erb',
-  $cron_splay             = 600,
-  $timeout                = 60,
+  Stdlib::Host $server,
+  Stdlib::Port $port,
+  Array $policies,
+  String $ensure = 'present',
+  Boolean $fetch_remote_resources = false,
+  Optional[Stdlib::Host] $http_proxy_server = undef,
+  Optional[Stdlib::Port] $http_proxy_port = undef,
+  Stdlib::Absolutepath $ca_file = $::foreman_scap_client::params::ca_file,
+  Stdlib::Absolutepath $host_certificate = $::foreman_scap_client::params::host_certificate,
+  Stdlib::Absolutepath $host_private_key = $::foreman_scap_client::params::host_private_key,
+  String $package_name = $::foreman_scap_client::params::package_name,
+  Optional[String] $foreman_repo_rel = undef,
+  String $foreman_repo_key = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
+  Optional[String] $foreman_repo_src = undef,
+  Boolean $foreman_repo_gpg_chk = false,
+  Optional[String] $install_options = undef,
+  String $cron_template = 'foreman_scap_client/cron.erb',
+  Integer[0] $cron_splay = 600,
+  Integer[0] $timeout = 60,
 ) inherits foreman_scap_client::params {
   $cron_sleep = fqdn_rand($cron_splay)
 
@@ -113,7 +147,7 @@ class foreman_scap_client(
         'Fedora' => 'f',
         default => 'el'
       }
-      $baseurl = "http://yum.theforeman.org/${_reposuffix}/${foreman_repo_rel}/${_osfamily}${::operatingsystemmajrelease}/\$basearch"
+      $baseurl = "https://yum.theforeman.org/${_reposuffix}/${foreman_repo_rel}/${_osfamily}${::operatingsystemmajrelease}/\$basearch"
     }
 
     yumrepo { "foreman-${_reposuffix}":

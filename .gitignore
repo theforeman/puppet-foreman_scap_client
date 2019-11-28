@@ -1,2 +1,4 @@
 Gemfile.lock
 .idea
+.yardoc
+REFERENCE.md
