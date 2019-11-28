@@ -1,6 +1,7 @@
 # Params class for parent foreman_scap_client
+# @api private
 class foreman_scap_client::params {
-  $downcased_fqdn = downcase($::fqdn)
+  $downcased_fqdn = downcase($facts['fqdn'])
   $ssl_dir = '/etc/puppetlabs/puppet/ssl'
 
   # Set CA file
@@ -27,7 +28,7 @@ class foreman_scap_client::params {
     $rh_certificate_consumer_host_key = undef
   }
 
-  $package_name = $::osfamily ? {
+  $package_name = $facts['osfamily'] ? {
     'Debian' => 'ruby-foreman-scap-client',
     default  => 'rubygem-foreman_scap_client'
   }

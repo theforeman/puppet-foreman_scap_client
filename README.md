@@ -72,5 +72,6 @@ We use project blacksmith to do the release. All you need to do is configuring t
 credentials in ~/.puppetforge.yml and then call release task from upstream repo like this
 
 ```
+bundle exec rake strings:generate:reference
 bundle exec rake module:release
 ```
