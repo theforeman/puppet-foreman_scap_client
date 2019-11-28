@@ -1,11 +1,7 @@
 # Params class for parent foreman_scap_client
 class foreman_scap_client::params {
   $downcased_fqdn = downcase($::fqdn)
-  if versioncmp('4.0.0', $clientversion) > 0 {
-    $ssl_dir = '/var/lib/puppet/ssl'
-  } else {
-    $ssl_dir = '/etc/puppetlabs/puppet/ssl'
-  }
+  $ssl_dir = '/etc/puppetlabs/puppet/ssl'
 
   # Set CA file
   if defined('$::rh_certificate_repo_ca_file') {
