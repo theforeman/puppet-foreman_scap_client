@@ -22,6 +22,8 @@ of foreman_scap_client.
   Unless set to an alternative file source, URL will be used.
 * 'foreman_repo_src':  Alternative baseurl for The Foreman plugins repository
 * 'foreman_repo_gpg_chk': Enable / disable GPG checks. Directly passed to Yumrepo resource
+* 'package_name': Name of the package that will be installed. The default is platform specific.
+* 'package_provider': Puppet provider to use to install the package, defaults to automatic detection
 * 'install_options': Additional options for client package installation
 * 'cron_template': Path to cron template
 * 'cron_splay': Upper limit for splay time when sending reports to proxy

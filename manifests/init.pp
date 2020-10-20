@@ -27,6 +27,10 @@
 # @param package_name
 #   os dependent package name for rubygem-foreman_scap_client package
 #
+# @param package_provider 
+#   provider for the package, defaults to yum but can be set to gem, or any other valid
+#   puppet package provider
+#
 # @param foreman_repo_rel
 #   add / manage foreman-plugins yum repo and set to release version. Eg  '1.14'
 #
@@ -107,6 +111,7 @@ class foreman_scap_client(
   Stdlib::Absolutepath $host_certificate = $::foreman_scap_client::params::host_certificate,
   Stdlib::Absolutepath $host_private_key = $::foreman_scap_client::params::host_private_key,
   String $package_name = $::foreman_scap_client::params::package_name,
+  Optional[String] $package_provider = undef,
   Optional[String] $foreman_repo_rel = undef,
   String $foreman_repo_key = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
   Optional[String] $foreman_repo_src = undef,
@@ -163,6 +168,7 @@ class foreman_scap_client(
   package { $package_name:
     ensure          => $ensure,
     install_options => $install_options,
+    provider        => $package_provider,
   }
   -> file { '/etc/foreman_scap_client':
     ensure => directory,
