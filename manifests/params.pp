@@ -1,7 +1,6 @@
 # Params class for parent foreman_scap_client
 # @api private
 class foreman_scap_client::params {
-  $downcased_fqdn = downcase($facts['fqdn'])
   $ssl_dir = '/etc/puppetlabs/puppet/ssl'
 
   # Set CA file
@@ -34,6 +33,6 @@ class foreman_scap_client::params {
   }
 
   $ca_file          = pick($rh_certificate_repo_ca_file, "${ssl_dir}/certs/ca.pem")
-  $host_certificate = pick($rh_certificate_consumer_host_cert, "${ssl_dir}/certs/${$downcased_fqdn}.pem")
-  $host_private_key = pick($rh_certificate_consumer_host_key, "${ssl_dir}/private_keys/${$downcased_fqdn}.pem")
+  $host_certificate = pick($rh_certificate_consumer_host_cert, "${ssl_dir}/certs/${trusted['certname']}.pem")
+  $host_private_key = pick($rh_certificate_consumer_host_key, "${ssl_dir}/private_keys/${trusted['certname']}.pem")
 }
