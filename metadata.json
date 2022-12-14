@@ -9,6 +9,12 @@
   "issues_url": "https://github.com/theforeman/puppet-foreman_scap_client/issues",
   "operatingsystem_support": [
     {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "6",
