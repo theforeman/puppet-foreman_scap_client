@@ -1,0 +1,20 @@
+---
+name: CI
+
+on:
+  pull_request:
+  schedule:
+    - cron: '4 4 * * *'
+
+
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  puppet:
+    name: Puppet
+    uses: voxpupuli/gha-puppet/.github/workflows/basic.yml@v1
+    with:
+      rubocop: false
+      cache-version: '1'
