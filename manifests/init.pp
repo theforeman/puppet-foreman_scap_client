@@ -25,7 +25,7 @@
 #   May be overriden if the rh_certificate_consumer_host_key fact is found
 #
 # @param package_name
-#   os dependent package name for rubygem-foreman_scap_client package
+#   Package name for Ruby foreman_scap_client package
 #
 # @param package_provider 
 #   provider for the package, defaults to yum but can be set to gem, or any other valid
@@ -110,7 +110,7 @@ class foreman_scap_client (
   Stdlib::Absolutepath $ca_file = $foreman_scap_client::params::ca_file,
   Stdlib::Absolutepath $host_certificate = $foreman_scap_client::params::host_certificate,
   Stdlib::Absolutepath $host_private_key = $foreman_scap_client::params::host_private_key,
-  String $package_name = $foreman_scap_client::params::package_name,
+  String $package_name = 'rubygem-foreman_scap_client',
   Optional[String] $package_provider = undef,
   Optional[String] $foreman_repo_rel = undef,
   String $foreman_repo_key = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
