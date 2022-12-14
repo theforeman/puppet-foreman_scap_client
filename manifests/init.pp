@@ -14,15 +14,15 @@
 #
 # @param ca_file
 #   path to file of certification authority that issued client's certificate
-#   May be overriden if $::rh_certificate_repo_ca_file (from Facter) is found
+#   May be overriden if the rh_certificate_repo_ca_file fact is found
 #
 # @param host_certificate
 #   path to host certificate, usually puppet agent certificate
-#   May be overriden if $::rh_certificate_consumer_host_cert (from Facter) is found
+#   May be overriden if the rh_certificate_consumer_host_cert fact is found
 #
 # @param host_private_key
 #   path to host private key, usually puppet agent private key
-#   May be overriden if $::rh_certificate_consumer_host_key (from Facter) is found
+#   May be overriden if the rh_certificate_consumer_host_key fact is found
 #
 # @param package_name
 #   os dependent package name for rubygem-foreman_scap_client package
@@ -99,7 +99,7 @@
 #       "tailoring_download_path" => "/compliance/policies/1/tailoring"
 #     }]
 #   }
-class foreman_scap_client(
+class foreman_scap_client (
   Stdlib::Host $server,
   Stdlib::Port $port,
   Array $policies,
@@ -107,10 +107,10 @@ class foreman_scap_client(
   Boolean $fetch_remote_resources = false,
   Optional[Stdlib::Host] $http_proxy_server = undef,
   Optional[Stdlib::Port] $http_proxy_port = undef,
-  Stdlib::Absolutepath $ca_file = $::foreman_scap_client::params::ca_file,
-  Stdlib::Absolutepath $host_certificate = $::foreman_scap_client::params::host_certificate,
-  Stdlib::Absolutepath $host_private_key = $::foreman_scap_client::params::host_private_key,
-  String $package_name = $::foreman_scap_client::params::package_name,
+  Stdlib::Absolutepath $ca_file = $foreman_scap_client::params::ca_file,
+  Stdlib::Absolutepath $host_certificate = $foreman_scap_client::params::host_certificate,
+  Stdlib::Absolutepath $host_private_key = $foreman_scap_client::params::host_private_key,
+  String $package_name = $foreman_scap_client::params::package_name,
   Optional[String] $package_provider = undef,
   Optional[String] $foreman_repo_rel = undef,
   String $foreman_repo_key = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
@@ -124,7 +124,6 @@ class foreman_scap_client(
   $cron_sleep = fqdn_rand($cron_splay)
 
   if $foreman_repo_rel {
-
     if $foreman_repo_key =~ /^http/ {
       $gpgkey = $foreman_repo_key
     } else {
@@ -132,7 +131,7 @@ class foreman_scap_client(
       $gpgkey = "file://${gpgkey_file}"
 
       file { $gpgkey_file:
-        ensure => present,
+        ensure => file,
         source => $foreman_repo_key,
         mode   => '0644',
         before => Yumrepo['foreman-plugins'],
@@ -148,11 +147,11 @@ class foreman_scap_client(
     if $foreman_repo_src {
       $baseurl = $foreman_repo_src
     } else {
-      $_osfamily = $::osfamily? {
+      $_osfamily = $facts['os']['family']? {
         'Fedora' => 'f',
         default => 'el'
       }
-      $baseurl = "https://yum.theforeman.org/${_reposuffix}/${foreman_repo_rel}/${_osfamily}${::operatingsystemmajrelease}/\$basearch"
+      $baseurl = "https://yum.theforeman.org/${_reposuffix}/${foreman_repo_rel}/${_osfamily}${facts['os']['release']['major']}/\$basearch"
     }
 
     yumrepo { "foreman-${_reposuffix}":
@@ -161,7 +160,7 @@ class foreman_scap_client(
       baseurl  => $baseurl,
       gpgkey   => $gpgkey,
       gpgcheck => $foreman_repo_gpg_chk,
-      before   => Package[$package_name]
+      before   => Package[$package_name],
     }
   }
 
@@ -176,14 +175,14 @@ class foreman_scap_client(
   }
 
   file { 'foreman_scap_client':
-    ensure  => present,
+    ensure  => file,
     path    => '/etc/foreman_scap_client/config.yaml',
     content => template('foreman_scap_client/config.yaml.erb'),
     owner   => 'root',
   }
 
   file { 'foreman_scap_client_cron':
-    ensure  => present,
+    ensure  => file,
     path    => '/etc/cron.d/foreman_scap_client_cron',
     content => template($cron_template),
     owner   => 'root',

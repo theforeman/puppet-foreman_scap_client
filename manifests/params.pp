@@ -4,30 +4,30 @@ class foreman_scap_client::params {
   $ssl_dir = '/etc/puppetlabs/puppet/ssl'
 
   # Set CA file
-  if defined('$::rh_certificate_repo_ca_file') {
-    $rh_certificate_repo_ca_file = $::rh_certificate_repo_ca_file
+  if defined('$facts[rh_certificate_repo_ca_file]') {
+    $rh_certificate_repo_ca_file = $facts['rh_certificate_repo_ca_file']
   }
   else {
     $rh_certificate_repo_ca_file = undef
   }
 
   # Set host cert
-  if defined('$::rh_certificate_consumer_host_cert') {
-    $rh_certificate_consumer_host_cert = $::rh_certificate_consumer_host_cert
+  if defined('$facts[rh_certificate_consumer_host_cert]') {
+    $rh_certificate_consumer_host_cert = $facts['rh_certificate_consumer_host_cert']
   }
   else {
     $rh_certificate_consumer_host_cert = undef
   }
 
   # Set private key
-  if defined('$::rh_certificate_consumer_host_key') {
-    $rh_certificate_consumer_host_key = $::rh_certificate_consumer_host_key
+  if defined('$facts[rh_certificate_consumer_host_key]') {
+    $rh_certificate_consumer_host_key = $facts['rh_certificate_consumer_host_key']
   }
   else {
     $rh_certificate_consumer_host_key = undef
   }
 
-  $package_name = $facts['osfamily'] ? {
+  $package_name = $facts['os']['family'] ? {
     'Debian' => 'ruby-foreman-scap-client',
     default  => 'rubygem-foreman_scap_client'
   }
