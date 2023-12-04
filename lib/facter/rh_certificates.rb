@@ -1,4 +1,5 @@
 Facter.add('rh_certificate') do
+  confine kernel: 'Linux'
   setcode do
     data = Facter::Util::Resolution.exec('/usr/sbin/subscription-manager config')
     break if data.nil? || data.empty?
