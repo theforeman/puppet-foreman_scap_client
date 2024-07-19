@@ -41,6 +41,29 @@ describe 'foreman_scap_client' do
               .with_content(%r{^:host_private_key: '/etc/rhsm/host/key\.pem'$})
           end
         end
+
+        context 'with flag to install bash version' do
+          let(:params) do
+            super().merge({
+              obsolete: false,
+              policies: [
+                {
+                  id: 1,
+                  profile_id: 'default',
+                  content_path: '/usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml',
+                }
+              ]
+            })
+          end
+
+          it { is_expected.to compile.with_all_deps }
+          it do
+            is_expected.to contain_file('foreman_scap_client')
+              .with_path('/etc/foreman_scap_client/config')
+              .with_content(%r{^POLICY_1_PROFILE="default"$})
+              .with_content(%r{^POLICY_1_CONTENT_PATH="/usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"$})
+          end
+        end
       end
     end
   end
