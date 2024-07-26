@@ -11,6 +11,7 @@ describe 'foreman_scap_client' do
             server: 'foreman-proxy.example.com',
             port: 8443,
             policies: [],
+            obsolete: true,
           }
         end
 
@@ -42,7 +43,7 @@ describe 'foreman_scap_client' do
           end
         end
 
-        context 'with flag to install bash version' do
+        context 'install bash version by default' do
           let(:params) do
             super().merge({
               obsolete: false,

@@ -24,6 +24,9 @@
 #   path to host private key, usually puppet agent private key
 #   May be overriden if the rh_certificate_consumer_host_key fact is found
 #
+# @param package_name
+#   Package name for foreman_scap_client package
+#
 # @param package_provider
 #   provider for the package, defaults to yum but can be set to gem, or any other valid
 #   puppet package provider
@@ -110,6 +113,7 @@ class foreman_scap_client (
   Stdlib::Absolutepath $ca_file = $foreman_scap_client::params::ca_file,
   Stdlib::Absolutepath $host_certificate = $foreman_scap_client::params::host_certificate,
   Stdlib::Absolutepath $host_private_key = $foreman_scap_client::params::host_private_key,
+  Optional[String] $package_name = undef,
   Optional[String] $package_provider = undef,
   Optional[String] $foreman_repo_rel = undef,
   String $foreman_repo_key = 'https://yum.theforeman.org/RPM-GPG-KEY-foreman',
@@ -119,17 +123,22 @@ class foreman_scap_client (
   String $cron_template = 'foreman_scap_client/cron.erb',
   Integer[0] $cron_splay = 600,
   Integer[0] $timeout = 60,
-  Boolean $obsolete = true,
+  Boolean $obsolete = false,
 ) inherits foreman_scap_client::params {
   $cron_sleep = fqdn_rand($cron_splay)
 
   if $obsolete {
-    $package_name = 'rubygem-foreman_scap_client'
+    if $package_name {
+      $real_package_name = $package_name
+    }
+    else {
+      $real_package_name = 'rubygem-foreman_scap_client'
+    }
     $config_path = '/etc/foreman_scap_client/config.yaml'
     $template_path = 'foreman_scap_client/config.yaml.erb'
   }
   else {
-    $package_name = 'rubygem-foreman_scap_client_bash'
+    $real_package_name = 'foreman_scap_client_bash'
     $config_path = '/etc/foreman_scap_client/config'
     $template_path = 'foreman_scap_client/config.erb'
   }
@@ -171,11 +180,11 @@ class foreman_scap_client (
       baseurl  => $baseurl,
       gpgkey   => $gpgkey,
       gpgcheck => $foreman_repo_gpg_chk,
-      before   => Package[$package_name],
+      before   => Package[$real_package_name],
     }
   }
 
-  package { $package_name:
+  package { $real_package_name:
     ensure          => $ensure,
     install_options => $install_options,
     provider        => $package_provider,
