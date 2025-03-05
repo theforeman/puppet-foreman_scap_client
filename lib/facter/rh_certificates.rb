@@ -2,7 +2,8 @@ Facter.add('rh_certificate') do
   confine kernel: 'Linux'
   setcode do
     data = Facter::Util::Resolution.exec('/usr/sbin/subscription-manager config')
-    break if data.nil? || data.empty?
+    next if data.nil? || data.empty?
+
     data_hash = data.gsub(/[\n\[\]]/, "").scan(/(\S+)\s*=\s* ([^ ]+)/).to_h
     consumer_cert_dir = data_hash["consumercertdir"]
     {
