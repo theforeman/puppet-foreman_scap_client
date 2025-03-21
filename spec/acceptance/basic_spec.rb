@@ -5,7 +5,8 @@ describe 'foreman_scap_client' do
     let(:manifest) do
       <<~PUPPET
       class { 'foreman_scap_client':
-        foreman_repo_rel => 'nightly',
+        # Since 3.14 the Ruby implementation is replaced by bash
+        foreman_repo_rel => '3.13',
         server           => 'foreman.example.com',
         port             => 8443,
         policies         => [],
