@@ -1,0 +1,3 @@
+---
+Rakefile:
+  tag_pattern: 'v%s'
