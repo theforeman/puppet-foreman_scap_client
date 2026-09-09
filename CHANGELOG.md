@@ -1,8 +1,16 @@
 # Changelog
 
-## [1.1.1](https://github.com/theforeman/puppet-foreman_scap_client/tree/1.1.1) (2026-09-09)
+## [2.0.0](https://github.com/theforeman/puppet-foreman_scap_client/tree/2.0.0) (2026-09-09)
 
-[Full Changelog](https://github.com/theforeman/puppet-foreman_scap_client/compare/v1.1.0...1.1.1)
+[Full Changelog](https://github.com/theforeman/puppet-foreman_scap_client/compare/v1.1.1...2.0.0)
+
+**Breaking changes:**
+
+- Switch from puppet to OpenVox 8 [\#89](https://github.com/theforeman/puppet-foreman_scap_client/pull/89) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v1.1.1](https://github.com/theforeman/puppet-foreman_scap_client/tree/v1.1.1) (2026-09-09)
+
+[Full Changelog](https://github.com/theforeman/puppet-foreman_scap_client/compare/v1.1.0...v1.1.1)
 
 **Fixed bugs:**
 
