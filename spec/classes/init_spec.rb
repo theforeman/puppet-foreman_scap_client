@@ -15,12 +15,26 @@ describe 'foreman_scap_client' do
         end
 
         it { is_expected.to compile.with_all_deps }
+        it { is_expected.to contain_package('foreman_scap_client_bash') }
+
         it do
           is_expected.to contain_file('foreman_scap_client')
             .with_path('/etc/foreman_scap_client/config.yaml')
             .with_content(%r{^:ca_file: '/etc/puppetlabs/puppet/ssl/certs/ca\.pem'$})
             .with_content(%r{^:host_certificate: '/etc/puppetlabs/puppet/ssl/certs/[a-z0-9\-\.]+.pem'$})
             .with_content(%r{^:host_private_key: '/etc/puppetlabs/puppet/ssl/private_keys/[a-z0-9\-\.]+.pem'$})
+        end
+
+        context 'with foreman_repo_rel set' do
+          let(:params) { super().merge(foreman_repo_rel: '3.19') }
+
+          it { is_expected.to contain_package('foreman_scap_client_bash').that_requires('Yumrepo[foreman-client]') }
+        end
+
+        context 'with package_name set' do
+          let(:params) { super().merge(package_name: 'custom-scap-client') }
+
+          it { is_expected.to contain_package('custom-scap-client') }
         end
 
         context 'with rh certificates' do
