@@ -5,8 +5,7 @@ describe 'foreman_scap_client' do
     let(:manifest) do
       <<~PUPPET
       class { 'foreman_scap_client':
-        # Since 3.14 the Ruby implementation is replaced by bash
-        foreman_repo_rel => '3.13',
+        foreman_repo_rel => '3.19',
         server           => 'foreman.example.com',
         port             => 8443,
         policies         => [],
@@ -15,7 +14,7 @@ describe 'foreman_scap_client' do
     end
   end
 
-  describe package('rubygem-foreman_scap_client') do
+  describe package('foreman_scap_client_bash') do
     it { is_expected.to be_installed }
   end
 end
